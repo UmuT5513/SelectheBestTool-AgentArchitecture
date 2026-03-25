@@ -16,10 +16,10 @@ class CapabilityScorer:
         # Ağırlıkları snake_case isimlendirme ile tanımlıyoruz
         self.weights: Dict[str, float] = {
             'exact_match': 1.0,
-            'partial_match': 0.5,
-            'category_match': 0.3,
-            'description_match': 0.2,
-            'semantic_match': 0.6
+            'partial_match': 0.8,
+            'category_match': 0.6,
+            'description_match': 0.4,
+            'semantic_match': 1.0
         }
 
     def score(self, tools: List[Any], intent: Any, semantic_scores: Optional[Dict[str, float]] = None) -> List[ToolScore]:
