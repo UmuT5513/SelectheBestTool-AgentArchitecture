@@ -1,0 +1,466 @@
+
+[*] ToolAutoLoader baslatiliyor...
+[*] 11 tool modülü keşfedildi.
+   [+] calendar_manager          (calendar_manager.py)
+   [+] code_executor             (code_executor.py)
+   [+] currency_converter        (currency_converter.py)
+   [+] database_query            (database_query.py)
+   [+] document_reader           (document_reader.py)
+   [+] stock_market_tracker      (ek_toollar.py)
+   [+] task_creator              (ek_toollar.py)
+   [+] sql_query_generator       (ek_toollar.py)
+   [+] image_generator           (ek_toollar.py)
+   [+] slack_message_sender      (ek_toollar.py)
+   [+] package_tracker           (ek_toollar.py)
+   [+] read_file                 (ek_toollar.py)
+   [+] write_file                (ek_toollar.py)
+   [+] search_files              (ek_toollar.py)
+   [+] delete_file               (ek_toollar.py)
+   [+] http_request              (ek_toollar.py)
+   [+] run_script                (ek_toollar.py)
+   [+] email_sender              (email_sender.py)
+   [+] timer                     (timer.py)
+   [+] translator                (translator.py)
+   [+] weather                   (weather.py)
+   [+] web_search                (web_search.py)
+[OK] Otomatik yukleme tamamlandi: 22 basarili, 0 basarisiz
+
+[*] Hypotetical (HyDE) Search baslatiliyor (OpenAI embedding)...
+[OK] Tool'lar ChromaDB'ye indekslendi.
+
+
+[*] Fallback Config:
+   - min_confidence_threshold : 0.3
+   - confirmation_threshold   : 0.6
+   - max_fallback_attempts    : 3
+   - fallback_order           : ['web_search', 'weather', 'task_creator', 'sql_query_generator']
+
+----------------------------------------------------------------------
+======================================================================
+  BestToolSelection - Pipeline Test
+======================================================================
+
+[*] Kayitli Tool Sayisi: 22
+   - calendar_manager     [productivity] - Takvim etkinliklerini sorgular, yeni etkinlik oluşturur veya...
+   - code_executor        [execution] - Karmaşık matematiksel hesaplamaları Python kodu yazarak ve ç...
+   - currency_converter   [finance] - Döviz ve kripto para birimleri arasında güncel kurlarla dönü...
+   - database_query       [data] - SQL veritabanından veri çeker. SELECT sorguları çalıştırır v...
+   - document_reader      [document] - Verilen bir URL veya dosya yolundaki PDF, TXT veya DOCX belg...
+   - stock_market_tracker [finance] - Belirli bir hisse senedi veya kripto varlığın anlık fiyat, h...
+   - task_creator         [productivity] - Todo listesine veya proje yönetim sistemine yeni bir görev e...
+   - sql_query_generator  [data] - Doğal dildeki isteği SQL sorgusuna dönüştürür ve opsiyonel o...
+   - image_generator      [media] - Metin açıklamasından yapay zeka ile görsel oluşturur....
+   - slack_message_sender [communication] - Belirli bir Slack kanalına veya kullanıcıya mesaj gönderir....
+   - package_tracker      [logistics] - Kargo takip numarasını kullanarak paket durumunu sorgular....
+   - read_file            [document] - Dosya sistemindeki bir dosyanın içeriğini okur....
+   - write_file           [document] - Dosya sistemine içerik yazar. Dosya yoksa oluşturur, varsa ü...
+   - search_files         [document] - Belirli bir dizin ağacında desene (pattern) uygun dosyaları ...
+   - delete_file          [document] - Dosya sisteminden bir dosyayı kalıcı olarak siler....
+   - http_request         [network] - Bir API uç noktasına HTTP isteği gönderir ve yanıtı döner....
+   - run_script           [execution] - Shell ortamında bir script veya komut çalıştırır....
+   - email_sender         [communication] - Belirtilen adrese e-posta gönderme simülasyonu yapar. Konu, ...
+   - timer                [productivity] - Belirli bir süre sonrasına hatırlatıcı veya alarm kurar. Dak...
+   - translator           [language] - Verilen metni kaynak dilden hedef dile çevirir. Türkçe, İngi...
+   - weather              [service] - Belirli bir lokasyonun güncel hava durumunu getirir. Sıcaklı...
+   - web_search           [network] - Güncel bilgiler için internette arama yapar. Arama sonuçları...
+
+----------------------------------------------------------------------
+
+[?] Sorgu 1: "Convert 150 USD to EUR"
+   |-- Action   : unknown
+   |-- Target   : unknown
+   |-- Category : general
+   |-- Keywords : ['convert', '150', 'usd', 'eur']
+   |-- Params   : {'number': 150}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : currency_converter
+   |-- Confidence         : 40.06%
+   |-- Validated Params   : {}
+   |-- [!] Missing Params : ['amount', 'from_currency', 'to_currency']
+   +-- [!] Warnings       : ['Unknown parameter: number']
+
+[?] Fallback Sorgu 1: "Convert 150 USD to EUR"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : needs_confirmation
+   |-- Requires Confirmation: True
+   |-- Secilen Tool        : currency_converter
+   |-- Message             : I'm 40% confident you want to use currency_converter. Is this correct?
+----------------------------------------------------------------------
+
+[?] Sorgu 2: "Get the current stock price of TSLA"
+   |-- Action   : read
+   |-- Target   : finance
+   |-- Category : finance
+   |-- Keywords : ['get', 'current', 'stock', 'price', 'tsla']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : stock_market_tracker
+   |-- Confidence         : 30.61%
+   |-- Validated Params   : {'interval': '1d'}
+   |-- [!] Missing Params : ['symbol']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 2: "Get the current stock price of TSLA"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : needs_confirmation
+   |-- Requires Confirmation: True
+   |-- Secilen Tool        : stock_market_tracker
+   |-- Params              : {'interval': '1d'}
+   |-- Message             : I'm 31% confident you want to use stock_market_tracker. Is this correct?
+----------------------------------------------------------------------
+
+[?] Sorgu 3: "Add a new task: Send the weekly report to me about the war news."
+   |-- Action   : send
+   |-- Target   : productivity
+   |-- Category : productivity
+   |-- Keywords : ['add', 'new', 'task:', 'send', 'weekly', 'report', 'about', 'war', 'news.']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : email_sender
+   |-- Confidence         : 12.34%
+   |-- Validated Params   : {}
+   |-- [!] Missing Params : ['to', 'subject', 'body']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 3: "Add a new task: Send the weekly report to me about the war news."
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : clarification_needed
+   |-- Requires Confirmation: False
+   |-- Message             : I need more information to select the right tool.
+   |-- Questions:
+   |     - What type of operation do you want to perform?
+   |     - What data or resource are you working with?
+----------------------------------------------------------------------
+
+[?] Sorgu 4: "Bake a chocolate cake for me"
+   |-- Action   : unknown
+   |-- Target   : unknown
+   |-- Category : general
+   |-- Keywords : ['bake', 'chocolate', 'cake']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : timer
+   |-- Confidence         : 4.92%
+   |-- Validated Params   : {'repeat': False}
+   |-- [!] Missing Params : ['message']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 4: "Bake a chocolate cake for me"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : clarification_needed
+   |-- Requires Confirmation: False
+   |-- Message             : I need more information to select the right tool.
+   |-- Questions:
+   |     - What type of operation do you want to perform?
+   |     - What data or resource are you working with?
+----------------------------------------------------------------------
+
+[?] Sorgu 5: "Maybe send an email or a Slack message"
+   |-- Action   : send
+   |-- Target   : communication
+   |-- Category : communication
+   |-- Keywords : ['maybe', 'send', 'email', 'slack', 'message']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : slack_message_sender
+   |-- Confidence         : 58.83%
+   |-- Validated Params   : {}
+   |-- [!] Missing Params : ['channel', 'message']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 5: "Maybe send an email or a Slack message"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : needs_confirmation
+   |-- Requires Confirmation: True
+   |-- Secilen Tool        : slack_message_sender
+   |-- Message             : I'm 59% confident you want to use slack_message_sender. Is this correct?
+----------------------------------------------------------------------
+
+[?] Sorgu 6: "Create a query to find the customers in Samsun for marketing"
+   |-- Action   : write
+   |-- Target   : unknown
+   |-- Category : general
+   |-- Keywords : ['create', 'query', 'find', 'customers', 'samsun', 'marketing']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : web_search
+   |-- Confidence         : 28.86%
+   |-- Validated Params   : {'max_results': 5, 'language': 'tr'}
+   |-- [!] Missing Params : ['query']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 6: "Create a query to find the customers in Samsun for marketing"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : clarification_needed
+   |-- Requires Confirmation: False
+   |-- Message             : I need more information to select the right tool.
+   |-- Questions:
+   |     - What type of operation do you want to perform?
+   |     - What data or resource are you working with?
+----------------------------------------------------------------------
+
+[?] Sorgu 7: "How do I say 'Good morning' in Spanish?"
+   |-- Action   : unknown
+   |-- Target   : unknown
+   |-- Category : general
+   |-- Keywords : ['how', 'say', "'good", "morning'", 'spanish?']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : translator
+   |-- Confidence         : 6.90%
+   |-- Validated Params   : {'source_language': 'auto'}
+   |-- [!] Missing Params : ['text', 'target_language']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 7: "How do I say 'Good morning' in Spanish?"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : clarification_needed
+   |-- Requires Confirmation: False
+   |-- Message             : I need more information to select the right tool.
+   |-- Questions:
+   |     - What type of operation do you want to perform?
+   |     - What data or resource are you working with?
+----------------------------------------------------------------------
+
+[?] Sorgu 8: "I need to pull the total revenue from the sales table"
+   |-- Action   : unknown
+   |-- Target   : database
+   |-- Category : data
+   |-- Keywords : ['need', 'pull', 'total', 'revenue', 'sales', 'table']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : database_query
+   |-- Confidence         : 23.83%
+   |-- Validated Params   : {'database': 'default', 'limit': 100}
+   |-- [!] Missing Params : ['query']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 8: "I need to pull the total revenue from the sales table"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : clarification_needed
+   |-- Requires Confirmation: False
+   |-- Message             : I need more information to select the right tool.
+   |-- Questions:
+   |     - What type of operation do you want to perform?
+   |     - What data or resource are you working with?
+----------------------------------------------------------------------
+
+[OK] Tum testler (pipeline + fallback) tamamlandi.
+
+======================================================================
+  HyDE (Hypothetical Document Embedding) - Test
+======================================================================
+
+[*] HyDESearch baslatiliyor (gpt-4o-mini)...
+[OK] HyDESearch hazir.
+
+----------------------------------------------------------------------
+  KARSILASTIRMA: Standard Semantic vs HyDE
+----------------------------------------------------------------------
+
+[?] HyDE Sorgu 1: "Convert 150 USD to EUR"
+   |-- Hypothetical Document: 
+ CurrencyConverter Pro: A powerful tool that accurately converts currencies in real-time, allowing users to quickly and efficiently convert amounts between various currencies. Capabilities: real-time conversion, multi-currency support, historical rates, user-friendly interface, customizable settings.
+   |
+   |-- Standard Semantic Top-3:
+   |     - currency_converter   : 0.3821
+   |     - stock_market_tracker : 0.1702
+   |     - translator           : 0.1411
+   |
+   |-- HyDE Semantic Top-3:
+   |     - currency_converter   : 0.6068
+   |     - stock_market_tracker : 0.3813
+   |     - calendar_manager     : 0.3188
+   |
+   +-- Top-1 Fark: ▲ 0.2247 (Std: currency_converter=0.3821, HyDE: currency_converter=0.6068)
+----------------------------------------------------------------------
+
+[?] HyDE Sorgu 2: "Get the current stock price of TSLA"
+   |-- Hypothetical Document: 
+ StockPriceFetcher: A real-time stock price retrieval tool that provides up-to-the-minute pricing information for various stocks, including TSLA. Capabilities: real-time data, stock tracking, price alerts, historical data analysis, multi-platform support.
+   |
+   |-- Standard Semantic Top-3:
+   |     - stock_market_tracker : 0.3729
+   |     - currency_converter   : 0.1629
+   |     - package_tracker      : 0.1473
+   |
+   |-- HyDE Semantic Top-3:
+   |     - stock_market_tracker : 0.5265
+   |     - package_tracker      : 0.2577
+   |     - currency_converter   : 0.2327
+   |
+   +-- Top-1 Fark: ▲ 0.1535 (Std: stock_market_tracker=0.3729, HyDE: stock_market_tracker=0.5265)
+----------------------------------------------------------------------
+
+[?] HyDE Sorgu 3: "Add a new task: Send the weekly report to me about the war news."
+   |-- Hypothetical Document: 
+ WarReportSender: This tool automates the process of compiling and sending weekly reports on war news directly to your inbox. Capabilities: report generation, email automation, news aggregation, scheduling, customizable templates.
+   |
+   |-- Standard Semantic Top-3:
+   |     - task_creator         : 0.3377
+   |     - calendar_manager     : 0.2948
+   |     - slack_message_sender : 0.2077
+   |
+   |-- HyDE Semantic Top-3:
+   |     - email_sender         : 0.3573
+   |     - calendar_manager     : 0.3292
+   |     - slack_message_sender : 0.2881
+   |
+   +-- Top-1 Fark: ▲ 0.0196 (Std: task_creator=0.3377, HyDE: email_sender=0.3573)
+----------------------------------------------------------------------
+
+[?] HyDE Sorgu 4: "Bake a chocolate cake for me"
+   |-- Hypothetical Document: 
+ Chocolate Cake Maker: This innovative kitchen appliance simplifies the process of baking a rich and moist chocolate cake with precision temperature control and automatic mixing features. Capabilities: automatic mixing, temperature control, timer settings, easy cleanup, recipe suggestions.
+   |
+   |-- Standard Semantic Top-3:
+   |     - code_executor        : 0.1290
+   |     - http_request         : 0.0788
+   |     - timer                : 0.0771
+   |
+   |-- HyDE Semantic Top-3:
+   |     - timer                : 0.2460
+   |     - calendar_manager     : 0.2135
+   |     - code_executor        : 0.1815
+   |
+   +-- Top-1 Fark: ▲ 0.1170 (Std: code_executor=0.1290, HyDE: timer=0.2460)
+----------------------------------------------------------------------
+
+[?] HyDE Sorgu 5: "Maybe send an email or a Slack message"
+   |-- Hypothetical Document: 
+ CommuniSend: A versatile communication tool that seamlessly integrates email and Slack messaging, allowing users to send messages, schedule communications, and track responses in one platform. Capabilities: email integration, Slack messaging, message scheduling, response tracking, user analytics.
+   |
+   |-- Standard Semantic Top-3:
+   |     - slack_message_sender : 0.4166
+   |     - email_sender         : 0.2305
+   |     - task_creator         : 0.1950
+   |
+   |-- HyDE Semantic Top-3:
+   |     - slack_message_sender : 0.4648
+   |     - email_sender         : 0.3099
+   |     - calendar_manager     : 0.3059
+   |
+   +-- Top-1 Fark: ▲ 0.0483 (Std: slack_message_sender=0.4166, HyDE: slack_message_sender=0.4648)
+----------------------------------------------------------------------
+
+[?] HyDE Sorgu 6: "Create a query to find the customers in Samsun for marketing"
+   |-- Hypothetical Document: 
+ CustomerQueryTool: This tool allows users to efficiently filter and retrieve customer data based on location, specifically targeting customers in Samsun for marketing purposes. Capabilities: data filtering, location targeting, customer segmentation, report generation, marketing analysis.
+   |
+   |-- Standard Semantic Top-3:
+   |     - database_query       : 0.3268
+   |     - sql_query_generator  : 0.3146
+   |     - package_tracker      : 0.2243
+   |
+   |-- HyDE Semantic Top-3:
+   |     - database_query       : 0.4028
+   |     - sql_query_generator  : 0.3729
+   |     - web_search           : 0.2981
+   |
+   +-- Top-1 Fark: ▲ 0.0760 (Std: database_query=0.3268, HyDE: database_query=0.4028)
+----------------------------------------------------------------------
+
+[?] HyDE Sorgu 7: "How do I say 'Good morning' in Spanish?"
+   |-- Hypothetical Document: 
+ TranslationTool: A versatile language translation tool that provides instant translations for common phrases and words across multiple languages. Capabilities: real-time translation, multilingual support, voice recognition, text-to-speech, user-friendly interface.
+   |
+   |-- Standard Semantic Top-3:
+   |     - weather              : 0.1418
+   |     - timer                : 0.1367
+   |     - slack_message_sender : 0.1141
+   |
+   |-- HyDE Semantic Top-3:
+   |     - translator           : 0.5098
+   |     - document_reader      : 0.3124
+   |     - timer                : 0.2940
+   |
+   +-- Top-1 Fark: ▲ 0.3680 (Std: weather=0.1418, HyDE: translator=0.5098)
+----------------------------------------------------------------------
+
+[?] HyDE Sorgu 8: "I need to pull the total revenue from the sales table"
+   |-- Hypothetical Document: 
+ RevenueExtractor: A powerful data analysis tool designed to aggregate and summarize financial data from various tables. Capabilities: data aggregation, SQL querying, report generation, data visualization, real-time analytics.
+   |
+   |-- Standard Semantic Top-3:
+   |     - database_query       : 0.2593
+   |     - sql_query_generator  : 0.1769
+   |     - stock_market_tracker : 0.1716
+   |
+   |-- HyDE Semantic Top-3:
+   |     - database_query       : 0.3157
+   |     - stock_market_tracker : 0.2956
+   |     - code_executor        : 0.2868
+   |
+   +-- Top-1 Fark: ▲ 0.0564 (Std: database_query=0.2593, HyDE: database_query=0.3157)
+----------------------------------------------------------------------
+
+[*] HyDE Istatistikleri:
+   - Basarili HyDE cagrilari : 16
+   - Fallback cagrilari      : 0
+
+[OK] HyDE testleri tamamlandi.
+
+======================================================================
+  Main Agent Testi (gpt-4o-mini)
+======================================================================
+
+[?] Agent Sorgu 1: "Bana İstanbul'daki güncel hava durumunu söyle, ardından sonucu ali@example.com adresine e-posta at."
+HyDE Semantic Search kullaniliyor...
+HyDE Semantic Search kullaniliyor...
+   |-- Agent Yaniti:
+İlk olarak, İstanbul'daki güncel hava durumunu bulmak için bir araç arıyorum. Ancak, bu konuda kesin bir bilgiye sahip değilim. Hava durumu bilgisi almak istediğinizi onaylar mısınız?
+
+Ayrıca, e-posta göndermek için hangi içeriği kullanmam gerektiği konusunda daha fazla bilgiye ihtiyacım var. E-postanın içeriği nedir?
+
+
+[?] Agent Sorgu 2: "Şirketin 2025 yılı hedefleri nedir?"
+HyDE Semantic Search kullaniliyor...
+   |-- Agent Yaniti:
+Şirketin 2025 yılı hedefleri hakkında bilgi bulmak için daha fazla bilgiye ihtiyacım var. Hangi şirketin hedeflerini öğrenmek istediğinizi belirtir misiniz?
+
+
+[?] Agent Sorgu 3: "Apple'ın güncel hisse senedi fiyatını öğren ve bana bildir."
+HyDE Semantic Search kullaniliyor...
+   |-- Agent Yaniti:
+Apple'ın güncel hisse senedi fiyatını öğrenmek için uygun aracı bulmam gerekiyor. Ancak, bu işlem için daha fazla bilgiye ihtiyacım var. Hisse senedi fiyatını hangi borsa üzerinden öğrenmemi istersiniz? Örneğin, NASDAQ veya başka bir borsa?
+
+
+[?] Agent Sorgu 4: "Bana Mars hakkında en son haberleri web'de ara ve özetle."
+HyDE Semantic Search kullaniliyor...
+   |-- Agent Yaniti:
+Mars hakkında en son haberleri bulmak için uygun aracı seçmem gerekiyor. Ancak, bu işlem için daha fazla bilgiye ihtiyacım var. Hangi tür haberleri aramak istediğinizi belirtir misiniz? Örneğin, bilimsel keşifler, uzay görevleri veya Mars'taki yaşam ile ilgili haberler gibi spesifik bir alan var mı?
+
+
+[?] Agent Sorgu 5: "500 Amerikan Doları kaç Euro yapıyor, hesaplayıp bana söyler misin?"
+HyDE Semantic Search kullaniliyor...
+   |-- Agent Yaniti:
+Döviz kuru bilgilerini almak için uygun bir araca erişmem gerekiyor. Ancak, hangi döviz kuru verilerini kullanmam gerektiğini belirtmedin. Güncel döviz kuru bilgilerini almak için bir arama yapmam gerekiyor. 
+
+Bunun için doğru aracı bulmak üzere tekrar bir talep göndereceğim. Bekle lütfen.
+
+
+[?] Agent Sorgu 6: "Bir SQL sorgusu yazmanı istiyorum: son 30 günün en çok satan 5 ürününü getir."
+   |-- Agent Yaniti:
+SQL sorgusunu yazmak için gerekli olan tablo yapısını ve alanları bilmem gerekiyor. Ancak genel bir örnek vermek gerekirse, aşağıdaki gibi bir sorgu yazabilirim:
+
+```sql
+SELECT product_id, SUM(quantity) AS total_sales
+FROM sales
+WHERE sale_date >= NOW() - INTERVAL 30 DAY
+GROUP BY product_id
+ORDER BY total_sales DESC
+LIMIT 5;
+```
+
+Bu sorgu, son 30 gün içinde en çok satan 5 ürünü getirir. `sales` tablosunda `product_id`, `quantity` ve `sale_date` alanlarının bulunduğunu varsayıyorum. Eğer tablo yapınız farklıysa, lütfen bana gerekli bilgileri verin, böylece sorguyu buna göre güncelleyebilirim.
+
+
+[?] Agent Sorgu 7: "Bana 'Yapay zeka geleceği nasıl şekillendirecek?' cümlesinin Japoncasını çevirir misin?"
+HyDE Semantic Search kullaniliyor...
+   |-- Agent Yaniti:
+Çeviri işlemi için uygun bir araç bulmam gerekiyor. Ancak, bu işlem için hangi dil çeviri aracını kullanmam gerektiğini belirlemek için daha fazla bilgiye ihtiyacım var. 
+
+Lütfen çeviri işlemi için hangi dilde bir araç kullanmam gerektiğini belirtir misin? Örneğin, "Türkçe'den Japonca'ya çeviri" gibi.
+
+[OK] Main Agent testleri tamamlandi.
+
