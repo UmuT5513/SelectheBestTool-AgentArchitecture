@@ -1,0 +1,10 @@
+.env
+__pycache__
+__init__.py
+.vscode
+
+#eski çıktı
+output.txt
+
+
+
