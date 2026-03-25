@@ -1,5 +1,7 @@
 # SelectheBestTool - An Agent Architecture for Tool Selection (simple custom MCP server)
 
+📍 [English](README.md) | [Türkçe](README_tr.md)
+
 ## Architecture 
 
 We have 3 main components:

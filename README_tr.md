@@ -1,5 +1,7 @@
 # SelectheBestTool - Araç Seçimi İçin Ajan Mimarisi (basit özel MCP sunucusu)
 
+📍 [English](README.md) | [Türkçe](README_tr.md)
+
 ## Mimari 
 
 3 ana bileşenimiz bulunmaktadır:
