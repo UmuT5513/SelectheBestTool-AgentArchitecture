@@ -141,6 +141,8 @@ The parameter catching mechanism is not good enough.
 > **Hypotetical document to be sent to vector database:** *"CurrencyConverter Pro: A powerful tool that accurately converts currencies in real-time, allowing users to quickly and efficiently exchange USD to EUR and vice versa. Capabilities: real-time conversion, multi-currency support, historical data analysis, user-friendly interface, customizable exchange rates."*
 
 **Result:**
+
+
 ![Standard Semantic vs HyDE](source_photos/standartsemantic_vs_HyDE.png)
 
 
