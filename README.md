@@ -1,151 +1,161 @@
-# BestToolSelection
+# SelectheBestTool - An Agent Architecture for Tool Selection (simple custom MCP server)
 
-Kullanıcı sorgularını analiz ederek en uygun aracı (tool) seçen akıllı bir pipeline sistemi. **Keyword eşleştirme**, **intent parsing** ve **semantic search** stratejilerini bir arada kullanır.
+## Architecture 
 
-## 🏗️ Mimari
+We have 3 main components:
 
-```
-Kullanıcı Sorgusu
-       │
-       ▼
- ┌─────────────┐
- │ IntentParser │  → Aksiyon, hedef, anahtar kelime, parametre çıkarımı
- └──────┬──────┘
-        │
-        ▼
- ┌──────────────────┐
- │  Candidate Pool   │  → Kategori + Keyword + Semantic Search ile aday toplama
- └──────┬───────────┘
-        │
-        ▼
- ┌──────────────────┐
- │CapabilityScorer   │  → Exact/Partial/Category/Description/Semantic skorlama
- └──────┬───────────┘
-        │
-        ▼
- ┌──────────────────┐
- │ParameterValidator │  → Parametre doğrulama (tip, enum, regex, zorunluluk)
- └──────┬───────────┘
-        │
-        ▼
- ┌──────────────────┐
- │ FallbackHandler   │  → Düşük güven durumunda yedek plan ve açıklama isteme
- └──────────────────┘
-```
+### 1. Main Agent that knows nothing about tools. 
+An agent (`gpt-4o-mini` based) that knows nothing about tools beforehand. It uses a meta-tool (`find_and_select_tool`) to declare its intent dynamically, and the system tries to find the appropriate tools for it.
 
-## 📁 Dosya Yapısı
+### 2. Tool Registry that stores the tools explanations in JSON format.
+Stores the tools explanations in JSON format and schema objects. Automatically discovers tools.
 
-| Dosya | Açıklama |
-|---|---|
-| `Tool.py` | `ToolSchema`, `ToolParameter` ve `ToolRegistry` tanımları |
-| `ToolAutoLoader.py` | `tools/` dizinindeki tool'ları otomatik keşfedip yükleyen modül |
-| `Intent.py` | Kullanıcı sorgusundan aksiyon, hedef ve parametre çıkarımı |
-| `Score.py` | Keyword + semantic benzerlik tabanlı puanlama motoru |
-| `SemanticSearch.py` | ChromaDB + OpenAI embedding ile vektörel anlamsal arama |
-| `Selector.py` | Tüm bileşenleri birleştiren ana seçim orchestrator'ı |
-| `Validate.py` | Parametre tip, enum ve regex doğrulama |
-| `Fallback.py` | Düşük güven senaryolarında yedek plan yönetimi |
-| `main.py` | Demo ve test senaryoları |
-| `tools/` | Otomatik yüklenen tool tanım dosyaları dizini |
+### 3. Tool Selector that makes a bridge between main agent and tool registry.
 
-### `tools/` Dizini — Kayıtlı Tool'lar
+Acts as a bridge between the main agent and the tool registry. As a user, when you ask something to the main agent, it will use the tool selector to find the best tool by applying filtering and scoring pipeline.
 
-| Dosya | Tool Adı | Açıklama |
-|---|---|---|
-| `weather.py` | `weather` | Lokasyon bazlı hava durumu sorgulama |
-| `code_executor.py` | `code_executor` | Python ile matematiksel hesaplama |
-| `web_search.py` | `web_search` | İnternet arama motoru |
-| `currency_converter.py` | `currency_converter` | Döviz / Kripto para dönüşümü |
-| `calendar_manager.py` | `calendar_manager` | Takvim etkinlik yönetimi |
-| `database_query.py` | `database_query` | SQL veritabanı sorgulama |
-| `document_reader.py` | `document_reader` | PDF/TXT belge okuyucu |
-| `translator.py` | `translator` | Metin çeviri servisi |
-| `email_sender.py` | `email_sender` | E-posta gönderme simülasyonu |
-| `timer.py` | `timer` | Zamanlayıcı / hatırlatıcı |
+## Other/Sub components
 
-## 🔌 Yeni Tool Ekleme
+- **Intent Parser:** Parses the user query into keywords, category, action and target.
+- **Capability Scorer:** Scores the tools by exact match and partial match (up to keywords that extracted by parser), category match, description of the tool and semantic match (HyDE search or ordinary semantic search). It uses the following base weights:
+  - `exact_match`: 1.0
+  - `partial_match`: 0.8
+  - `category_match`: 0.6
+  - `description_match`: 0.4
+  - `semantic_match`: 1.0
+- **Validate Mechanism:** Beside it checks for type and regex pattern, also hecks query parameters, which is extraced by Parser, with tool parameters. 
+- **Fallback Mechanism:** Implements an alternative plan when in the situation of low confidence, the calculation done by Capability Scorer.
+- **Semantic Search Mechanism (HyDE):** HyDE produces hypotetical documents from user query by using vector database. By this way the words matching process can be implemented efficiently because the hypotetic documents is a kind of designed query according to the tools descriptions.
 
-Sisteme yeni bir tool eklemek için `tools/` dizinine bir `.py` dosyası oluşturun. `ToolAutoLoader` dosyayı otomatik keşfeder ve kaydeder.
+## Tools
 
-### Convention
+The framework automatically discovers and registers tools from the `tools/` directory. 
+- **Web Search** & **Weather**
+- **Database SQL Generators** & **Code Executors**
+- **Calendar & Task Managers**
+- **File System Tools** (Read/Write/Delete/Search)
+- **Translators** & **Currency Converters**
+- **AI Image Generators**, **Mailing**, & **Slack Integration**
 
-Her tool modülü, modül seviyesinde bir `TOOL_DEFINITIONS` listesi export etmelidir:
+## Adding a new tool
+The ToolAutoLoader facilitates this process. 
+In order to add a new tool create a new [tool_name].py file. Fill in file with right tool schema. 
 
 ```python
 from Tool import ToolSchema, ToolParameter
 
 my_tool = ToolSchema(
     name='my_tool',
-    description='Tool açıklaması',
+    description='Description of the tool',
     category='category_name',
     parameters=[
         ToolParameter(name='param1', type='string', description='...', required=True)
     ],
     returns={'type': 'string', 'description': '...'},
-    examples=[{'input': {'param1': 'value'}, 'description': 'Örnek kullanım'}],
+    examples=[{'input': {'param1': 'value'}, 'description': 'Example usage'}],
     capabilities=['keyword1', 'keyword2']
 )
 
 TOOL_DEFINITIONS = [my_tool]
 ```
 
-> **Not:** `TOOL_DEFINITIONS` listesi birden fazla `ToolSchema` içerebilir — tek dosyada birden fazla tool tanımlanabilir.
 
-## 🔍 Strateji Katmanları
+## File Structure
 
-### 1. Intent Parsing
-Regex tabanlı aksiyon (`read`, `write`, `search`, `delete`, `execute`) ve hedef (`file`, `database`, `api`, `code`) algılama. Stop-word filtreleme ile keyword çıkarımı.
+| File | Description |
+|---|---|
+| `Tool.py` | The definitions of `ToolSchema`, `ToolParameter` and `ToolRegistry` |
+| `ToolAutoLoader.py` | The module that automatically discovers the tools where located in `tools/` directory  |
+| `Intent.py` | The extraction of actions, targets and parameters from user query |
+| `Score.py` | A scoring engine based on keyword + semantic similarity |
+| `SemanticSearch.py` | ChromaDB + OpenAI embedding ile vektörel anlamsal arama |
+| `Selector.py` | The main selection orchestrator the connect the main agent with the tool registry |
+| `Validate.py` | Parameter type, enum and regex validation |
+| `Fallback.py` | Low confidence scenarios and fallback mechanism |
+| `main.py` | Demos and Tests |
+| `tools/` | The directory where the tools are located |
 
-### 2. Keyword Matching
-Tool capability'leri ile keyword tam/kısmi eşleştirme. Kategori eşleşme bonusu ve description kelime örtüşmesi hesaplama.
+## Installation
 
-### 3. Semantic Search (ChromaDB + OpenAI)
-Tool açıklamalarını **OpenAI `text-embedding-3-small`** modeli ile vektörleştirerek ChromaDB'de depolar. Kullanıcı sorgusunu aynı modelle vektörleyip **cosine similarity** ile en yakın tool'ları bulur.
+### 1. Clone the repository
 
-> Keyword eşleşmesi olmasa bile anlamsal yakınlık üzerinden doğru aracı bulmayı sağlar.  
-> Örn: *"I want to store some notes on disk"* → `write_file`
-
-## ⚙️ Kurulum
-
-### Gereksinimler
-- Python 3.10+
-- Conda `ai` ortamı (veya herhangi bir Python ortamı)
-
-### Bağımlılıklar
 ```bash
-pip install chromadb openai python-dotenv
+git clone <repository-url>
+cd SelectheBestTool
 ```
 
-### Ortam Değişkenleri
-`.env` dosyasında OpenAI API anahtarınızı tanımlayın:
-```
-OPENAI_API_KEY=sk-...
+### 2. Create a Virtual Environment for isolating your workspace
+
+```bash
+python -m venv .venv
+
+# Select the environment
+# Windows
+.venv\Scripts\activate # if you are in powershell use .venv\Scripts\Activate.ps1
+
+# Linux/Mac
+source .venv/bin/activate
 ```
 
-## 🚀 Çalıştırma
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Set up environment variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+OPENAI_API_KEY=your_openai_api_key
+```
+
+### 4. Run the application
 
 ```bash
 python main.py
 ```
 
-Çıktı dört bölüm içerir:
-1. **Auto-Load** — `tools/` dizininden otomatik tool keşfi ve yükleme
-2. **Pipeline Test** — 8 temel sorgu ile tool seçim pipeline'ı
-3. **Fallback Test** — Düşük güven ve belirsiz sorgular için yedek plan senaryoları
-4. **Semantic Search Test** — Keyword eşleşmesi zayıf, anlamsal yakınlığı yüksek 6 sorgu
+Note: When you run the application, it will automatically discover the tools from the `tools/` directory and register them to the tool registry. The run flow of file is that it will show you the demos of the system without the maint agent first. Then, with no stop or any asking, it will test the main agent with a few examples.
 
-## 📊 Skorlama Ağırlıkları
 
-| Strateji | Ağırlık |
-|---|---|
-| Exact keyword match | 1.0 |
-| Semantic match | 0.6 |
-| Partial keyword match | 0.5 |
-| Category match | 0.3 |
-| Description overlap | 0.2 |
+## Issues
+The parameter catching mechanism is not good enough. 
 
-**AI yardımcı ile geliştirilmiştir.**
+![Missing Parameters](source_photos/missing_params.png)
 
-## Referances
+**The problem could be possibly about the the Tools definitions, descriptions and examples. If the tools are declared clearly and explicitly, the mechanism will work better.**
+
+
+## Comparing Standart Semantic vs HyDE
+
+- **The user query:** *"Convert 150 USD to EUR"*
+
+**Standart Semantic Search:**
+> It Just send the user query to the vector database. The vector database will return the most similar documents to the user query.
+
+**HyDE:**
+> **Hypotetical document to be sent to vector database:** *"CurrencyConverter Pro: A powerful tool that accurately converts currencies in real-time, allowing users to quickly and efficiently exchange USD to EUR and vice versa. Capabilities: real-time conversion, multi-currency support, historical data analysis, user-friendly interface, customizable exchange rates."*
+
+**Result:**
+![Standard Semantic vs HyDE](source_photos/standartsemantic_vs_HyDE.png)
+
+
+
+
+## Use of Main Agent
+
+![Main Agent Example](source_photos/main_agent_example1_1.png)
+
+The result and others that I didn't share shows that since the system is a kind of demo, the configuration of Capability Scorer is mandatory. The problem is that when the main agent wants to find the best tool, it checks the score of them. Because the scores is not good enough to select a tool, the responses are turned out to be unrelated or asking for clarification. 
+
+## References
 
 https://oneuptime.com/blog/post/2026-01-30-tool-selection/
+
+
+
+
+
+
