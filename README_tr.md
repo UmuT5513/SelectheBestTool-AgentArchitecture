@@ -122,6 +122,202 @@ python main.py
 Not: Uygulamayı çalıştırdığınızda, Sistem `tools/` dizinindeki araçları otomatik olarak keşfedecek ve bunları araç kayıt defterine (tool registry) kaydedecektir. Dosyanın akışı şu şekildedir: İlk olarak ana ajan olmadan sistemin demolarını size gösterecektir. Ardından, birkaç örnekle ana ajanı test edecektir.
 
 
+## Çıktılar
+
+**Action**, **Target**, **Category**, **Keywords** ve **Params** kullanıcı sorgusundan çıkarılır. Yani, sorgunun öznitelikleridir.  
+
+**Confidence**, Capability Scorer tarafından hesaplanan puandır.
+
+**Validated Params**, Validate Mechanism tarafından doğrulanan parametrelerdir.
+
+**Missing Params**, normalde kullanıcı sorgusundan çıkarılması gereken ancak çıkarılamayan parametrelerdir.
+
+**Warnings**, Validate Mechanism tarafından yapılan uyarılardır.
+
+```text
+[?] Sorgu 1: "Convert 150 USD to EUR"
+   |-- Action   : unknown
+   |-- Target   : unknown
+   |-- Category : general
+   |-- Keywords : ['convert', '150', 'usd', 'eur']
+   |-- Params   : {'number': 150}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : currency_converter
+   |-- Confidence         : 40.06%
+   |-- Validated Params   : {}
+   |-- [!] Missing Params : ['amount', 'from_currency', 'to_currency']
+   +-- [!] Warnings       : ['Unknown parameter: number']
+
+[?] Fallback Sorgu 1: "Convert 150 USD to EUR"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : needs_confirmation
+   |-- Requires Confirmation: True
+   |-- Secilen Tool        : currency_converter
+   |-- Message             : I'm 40% confident you want to use currency_converter. Is this correct?
+----------------------------------------------------------------------
+
+[?] Sorgu 2: "Get the current stock price of TSLA"
+   |-- Action   : read
+   |-- Target   : finance
+   |-- Category : finance
+   |-- Keywords : ['get', 'current', 'stock', 'price', 'tsla']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : stock_market_tracker
+   |-- Confidence         : 30.61%
+   |-- Validated Params   : {'interval': '1d'}
+   |-- [!] Missing Params : ['symbol']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 2: "Get the current stock price of TSLA"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : needs_confirmation
+   |-- Requires Confirmation: True
+   |-- Secilen Tool        : stock_market_tracker
+   |-- Params              : {'interval': '1d'}
+   |-- Message             : I'm 31% confident you want to use stock_market_tracker. Is this correct?
+----------------------------------------------------------------------
+
+[?] Sorgu 3: "Add a new task: Send the weekly report to me about the war news."
+   |-- Action   : send
+   |-- Target   : productivity
+   |-- Category : productivity
+   |-- Keywords : ['add', 'new', 'task:', 'send', 'weekly', 'report', 'about', 'war', 'news.']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : email_sender
+   |-- Confidence         : 12.34%
+   |-- Validated Params   : {}
+   |-- [!] Missing Params : ['to', 'subject', 'body']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 3: "Add a new task: Send the weekly report to me about the war news."
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : clarification_needed
+   |-- Requires Confirmation: False
+   |-- Message             : I need more information to select the right tool.
+   |-- Questions:
+   |     - What type of operation do you want to perform?
+   |     - What data or resource are you working with?
+----------------------------------------------------------------------
+
+[?] Sorgu 4: "Bake a chocolate cake for me"
+   |-- Action   : unknown
+   |-- Target   : unknown
+   |-- Category : general
+   |-- Keywords : ['bake', 'chocolate', 'cake']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : timer
+   |-- Confidence         : 4.92%
+   |-- Validated Params   : {'repeat': False}
+   |-- [!] Missing Params : ['message']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 4: "Bake a chocolate cake for me"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : clarification_needed
+   |-- Requires Confirmation: False
+   |-- Message             : I need more information to select the right tool.
+   |-- Questions:
+   |     - What type of operation do you want to perform?
+   |     - What data or resource are you working with?
+----------------------------------------------------------------------
+
+[?] Sorgu 5: "Maybe send an email or a Slack message"
+   |-- Action   : send
+   |-- Target   : communication
+   |-- Category : communication
+   |-- Keywords : ['maybe', 'send', 'email', 'slack', 'message']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : slack_message_sender
+   |-- Confidence         : 58.83%
+   |-- Validated Params   : {}
+   |-- [!] Missing Params : ['channel', 'message']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 5: "Maybe send an email or a Slack message"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : needs_confirmation
+   |-- Requires Confirmation: True
+   |-- Secilen Tool        : slack_message_sender
+   |-- Message             : I'm 59% confident you want to use slack_message_sender. Is this correct?
+----------------------------------------------------------------------
+
+[?] Sorgu 6: "Create a query to find the customers in Samsun for marketing"
+   |-- Action   : write
+   |-- Target   : unknown
+   |-- Category : general
+   |-- Keywords : ['create', 'query', 'find', 'customers', 'samsun', 'marketing']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : web_search
+   |-- Confidence         : 28.86%
+   |-- Validated Params   : {'max_results': 5, 'language': 'tr'}
+   |-- [!] Missing Params : ['query']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 6: "Create a query to find the customers in Samsun for marketing"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : clarification_needed
+   |-- Requires Confirmation: False
+   |-- Message             : I need more information to select the right tool.
+   |-- Questions:
+   |     - What type of operation do you want to perform?
+   |     - What data or resource are you working with?
+----------------------------------------------------------------------
+
+[?] Sorgu 7: "How do I say 'Good morning' in Spanish?"
+   |-- Action   : unknown
+   |-- Target   : unknown
+   |-- Category : general
+   |-- Keywords : ['how', 'say', "'good", "morning'", 'spanish?']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : translator
+   |-- Confidence         : 6.90%
+   |-- Validated Params   : {'source_language': 'auto'}
+   |-- [!] Missing Params : ['text', 'target_language']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 7: "How do I say 'Good morning' in Spanish?"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : clarification_needed
+   |-- Requires Confirmation: False
+   |-- Message             : I need more information to select the right tool.
+   |-- Questions:
+   |     - What type of operation do you want to perform?
+   |     - What data or resource are you working with?
+----------------------------------------------------------------------
+
+[?] Sorgu 8: "I need to pull the total revenue from the sales table"
+   |-- Action   : unknown
+   |-- Target   : database
+   |-- Category : data
+   |-- Keywords : ['need', 'pull', 'total', 'revenue', 'sales', 'table']
+   |-- Params   : {}
+HyDE Semantic Search kullaniliyor...
+   |-- [OK] Secilen Tool  : database_query
+   |-- Confidence         : 23.83%
+   |-- Validated Params   : {'database': 'default', 'limit': 100}
+   |-- [!] Missing Params : ['query']
+   +-- (Uyari yok)
+
+[?] Fallback Sorgu 8: "I need to pull the total revenue from the sales table"
+HyDE Semantic Search kullaniliyor...
+   |-- Status              : clarification_needed
+   |-- Requires Confirmation: False
+   |-- Message             : I need more information to select the right tool.
+   |-- Questions:
+   |     - What type of operation do you want to perform?
+   |     - What data or resource are you working with?
+----------------------------------------------------------------------
+
+[OK] Tum testler (pipeline + fallback) tamamlandi.
+```
+
+
 ## Sorunlar (Issues)
 Parametre yakalama mekanizması yeterince iyi çalışmıyor.
 
