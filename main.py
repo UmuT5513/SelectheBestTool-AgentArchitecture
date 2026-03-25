@@ -155,7 +155,7 @@ TEST_QUERIES = [
     "Search the web for the latest machine learning trends",
     "Convert 150 USD to EUR",
     "Get the current stock price of TSLA",
-    "Add a new task: Send the weekly report",
+    "Add a new task: Send the weekly report to me about the war news.",
     "Generate a SQL query for the last 7 days of sales",
     "Track my package with number TR123456789",
     "Send a Slack message to #general: Meeting starts in 5 minutes",
@@ -165,7 +165,7 @@ TEST_QUERIES = [
     "Do something about the problem",               # Belirsiz -> clarification_needed
     "Bake a chocolate cake for me",                 # Hicbir tool yok -> no_match
     "Maybe send an email or a Slack message",       # Orta guven -> needs_confirmation (email / slack)
-    "Create a new database for marketing",          # Orta/yuksek -> success/confirmation (sql_query_generator)
+    "Create a query to find the customers in Samsun for marketing",          # Orta/yuksek -> success/confirmation (sql_query_generator)
     "Adjust the quantum hyperdrive engines",        # Alakasiz -> no_match / clarification
     # ─── HyDE Test Sorguları ──────────────────────────────────────────
     # Doğal dilde yazılmış, keyword eşleşmesi çok zayıf olan sorgular.
@@ -369,7 +369,12 @@ async def main():
 
     agent_test_queries = [
         "Bana İstanbul'daki güncel hava durumunu söyle, ardından sonucu ali@example.com adresine e-posta at.",
-        "Şirketin 2025 yılı hedefleri nedir?"
+        "Şirketin 2025 yılı hedefleri nedir?",
+        "Apple'ın güncel hisse senedi fiyatını öğren ve bana bildir.",
+        "Bana Mars hakkında en son haberleri web'de ara ve özetle.",
+        "500 Amerikan Doları kaç Euro yapıyor, hesaplayıp bana söyler misin?",
+        "Bir SQL sorgusu yazmanı istiyorum: son 30 günün en çok satan 5 ürününü getir.",
+        "Bana 'Yapay zeka geleceği nasıl şekillendirecek?' cümlesinin Japoncasını çevirir misin?"
     ]
 
     for i, q in enumerate(agent_test_queries, 1):
