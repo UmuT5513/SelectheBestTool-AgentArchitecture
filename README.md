@@ -146,7 +146,7 @@ The parameter catching mechanism is not good enough.
 
 ## Use of Main Agent
 
-![Main Agent Example](source_photos/main_agent_example1_1.png)
+![Main Agent Example](source_photos/main_agent_example_1_1.png)
 
 The result and others that I didn't share shows that since the system is a kind of demo, the configuration of Capability Scorer is mandatory. The problem is that when the main agent wants to find the best tool, it checks the score of them. Because the scores is not good enough to select a tool, the responses are turned out to be unrelated or asking for clarification. 
 
