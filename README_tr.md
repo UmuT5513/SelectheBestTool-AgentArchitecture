@@ -119,7 +119,7 @@ OPENAI_API_KEY=sizin_openai_api_anahtariniz
 python main.py
 ```
 
-Not: Uygulamayı çalıştırdığınızda, `tools/` dizinindeki araçları otomatik olarak keşfedecek ve bunları araç kayıt defterine (tool registry) kaydedecektir. Dosyanın çalışma akışı şu şekildedir: İlk olarak ana ajan olmadan sistemin demolarını size gösterecektir. Ardından, durmaksızın veya kullanıcıya herhangi bir şey sormaksızın birkaç örnekle ana ajanı test edecektir.
+Not: Uygulamayı çalıştırdığınızda, Sistem `tools/` dizinindeki araçları otomatik olarak keşfedecek ve bunları araç kayıt defterine (tool registry) kaydedecektir. Dosyanın akışı şu şekildedir: İlk olarak ana ajan olmadan sistemin demolarını size gösterecektir. Ardından, birkaç örnekle ana ajanı test edecektir.
 
 
 ## Sorunlar (Issues)
@@ -127,7 +127,7 @@ Parametre yakalama mekanizması yeterince iyi çalışmıyor.
 
 ![Missing Parameters](source_photos/missing_params.png)
 
-**Sorun muhtemelen Araç tanımlarıyla, açıklamalarıyla ve örnekleriyle ilgilidir. Araçlar net ve belirgin bir şekilde tanımlanırsa mekanizma daha iyi çalışacaktır.**
+**Sorun muhtemelen Araç tanımlarıyla, açıklamalarıyla ve örnekleriyle ilgili. Eğer araçlar net ve belirgin bir şekilde tanımlanırsa, mekanizma daha iyi çalışacaktır.**
 
 
 ## Standart Anlamsal (Semantic) Arama ile HyDE'ın Karşılaştırılması
@@ -138,7 +138,7 @@ Parametre yakalama mekanizması yeterince iyi çalışmıyor.
 > Sadece kullanıcı sorgusunu vektör veritabanına gönderir. Vektör veritabanı, kullanıcı sorgusuna en çok benzeyen belgeleri döndürür.
 
 **HyDE:**
-> **Vektör veritabanına gönderilecek olan hipotetik (varsayımsal) belge:** *"CurrencyConverter Pro: Para birimlerini gerçek zamanlı olarak isabetli bir şekilde çeviren, kullanıcıların USD'yi EUR'ya ve tam tersine hızlı ve verimli bir şekilde dönüştürmesini sağlayan güçlü bir araç. Yetenekler: gerçek zamanlı dönüştürme, çoklu para birimi desteği, geçmiş veri analizi, kullanıcı dostu arayüz, özelleştirilebilir döviz kurları."*
+> **Bir LLM ile kullanıcı sorgusundan üretilen hipotetik belgeleri/belgeyi vektör tabanına gönderir. Bu noktada ilgili sorguya göre oluşturulan ve gönderilecek olan belge:** *"CurrencyConverter Pro: Para birimlerini gerçek zamanlı olarak isabetli bir şekilde çeviren, kullanıcıların USD'yi EUR'ya ve tam tersine hızlı ve verimli bir şekilde dönüştürmesini sağlayan güçlü bir araç. Yetenekler: gerçek zamanlı dönüştürme, çoklu para birimi desteği, geçmiş veri analizi, kullanıcı dostu arayüz, özelleştirilebilir döviz kurları."*
 
 **Sonuç:**
 ![Standard Semantic vs HyDE](source_photos/standartsemantic_vs_HyDE.png)
@@ -150,7 +150,7 @@ Parametre yakalama mekanizması yeterince iyi çalışmıyor.
 
 ![Main Agent Example](source_photos/main_agent_example_1_1.png)
 
-Paylaşmadığım diğer sonuçlar ve buradaki sonuç şunu gösteriyor ki, sistem bir tür demo olduğu için Capability Scorer (Yetki Puanlayıcı) konfigürasyonu hayati önem taşımaktadır. Sorun şu ki, ana ajan en iyi aracı bulmak istediğinde araçların puanını kontrol ediyor. Puanlar bir aracı seçmek için yeterince iyi olmadığından, yanıtlar alakasız sonuçlar veriyor veya netleştirme istenmesine yol açıyor.
+Aldığım diğer sonuçlar ve buradaki sonuç şunu gösteriyor ki, sistem bir tür demo olduğu için Capability Scorer (Yetki Puanlayıcı) konfigürasyonu hayati önem taşımaktadır. Sorun şu ki, ana ajan en iyi aracı bulmak istediğinde araçların puanını kontrol ediyor. Puanlar bir aracı seçmek için yeterince iyi olmadığından, yanıtlar alakasız sonuçlar veriyor veya daha fazla detay istenmesine yol açıyor.
 
 ## Referanslar
 
