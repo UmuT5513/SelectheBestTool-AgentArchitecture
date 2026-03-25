@@ -82,7 +82,7 @@ TOOL_DEFINITIONS = [my_tool]
 ### 1. Repoyu (depoyu) klonlayın
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/UmuT5513/SelectheBestTool-AgentArchitecture
 cd SelectheBestTool
 ```
 
