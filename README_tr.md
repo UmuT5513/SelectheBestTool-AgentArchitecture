@@ -29,6 +29,12 @@ Ana ajan ve araç kayıt defteri arasında bir köprü görevi görür. Bir kull
 - **Fallback Mechanism (Yedek Plan Mekanizması):** Capability Scorer tarafından yapılan hesaplamada düşük güven (low confidence) durumu oluştuğunda alternatif bir plan uygular.
 - **Semantic Search Mechanism (HyDE) (Anlamsal Arama Mekanizması):** HyDE, vektör veritabanını kullanarak kullanıcı sorgusundan hipotetik (varsayımsal) belgeler üretir. Hipotetik belgeler araç açıklamalarına göre tasarlanmış bir tür sorgu niteliğinde olduğundan, kelime eşleştirme işlemi bu sayede verimli bir şekilde uygulanabilir.
 
+
+## Akış
+
+![Akış](source_photos/tool_selection_flow.png)
+
+
 ## Araçlar (Tools)
 
 Sistem, araçları `tools/` dizininden otomatik olarak keşfeder ve kaydeder.

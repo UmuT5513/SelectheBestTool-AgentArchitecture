@@ -29,6 +29,12 @@ Acts as a bridge between the main agent and the tool registry. As a user, when y
 - **Fallback Mechanism:** Implements an alternative plan when in the situation of low confidence, the calculation done by Capability Scorer.
 - **Semantic Search Mechanism (HyDE):** HyDE produces hypotetical documents from user query by using vector database. By this way the words matching process can be implemented efficiently because the hypotetic documents is a kind of designed query according to the tools descriptions.
 
+
+## The Flow
+
+![The Flow](source_photos/tool_selection_flow.png)
+
+
 ## Tools
 
 The framework automatically discovers and registers tools from the `tools/` directory. 
@@ -357,6 +363,8 @@ The result and others that I didn't share shows that since the system is a kind 
 ## References
 
 https://oneuptime.com/blog/post/2026-01-30-tool-selection/
+
+
 
 
 
