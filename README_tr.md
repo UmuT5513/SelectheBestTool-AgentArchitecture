@@ -350,7 +350,7 @@ Parametre yakalama mekanizması yeterince iyi çalışmıyor.
 
 ## Ana Ajan'ın Kullanımı (Use of Main Agent)
 
-![Main Agent Example](source_photos/main_agent_example_1_1.png)
+![Main Agent Example](source_photos/main_agent_example_1.png)
 
 Aldığım diğer sonuçlar ve buradaki sonuç şunu gösteriyor ki, sistem bir tür demo olduğu için Capability Scorer (Yetki Puanlayıcı) konfigürasyonu hayati önem taşımaktadır. Sorun şu ki, ana ajan en iyi aracı bulmak istediğinde araçların puanını kontrol ediyor. Puanlar bir aracı seçmek için yeterince iyi olmadığından, yanıtlar alakasız sonuçlar veriyor veya daha fazla detay istenmesine yol açıyor.
 
